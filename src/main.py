@@ -11,7 +11,9 @@ def main():
 
         # Opción: jugar
         if seleccion == 1:
-            juego.jugar()
+            cartas_crupier, cartas_jugador, resultado = juego.jugar()
+
+            juego.acabar_partida(cartas_crupier, cartas_jugador, resultado)
 
 
 if __name__ == "__main__":
