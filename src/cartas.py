@@ -74,6 +74,34 @@ def obtener_puntos(carta: Carta) -> int:
     return puntos
 
 
+def obtener_suma(mazo: list[Carta]) -> int:
+    """
+    Obtiene la suma de un mazo de cartas.
+
+    Args:
+        cartas: Las cartas a sumar.
+    Returns:
+        int: La suma.
+    """
+    suma: int = 0
+    numero_as: int = 0
+
+    for carta in mazo:
+        puntos: int = obtener_puntos(carta)
+
+        if puntos == 11:
+            numero_as += 1
+
+        suma += puntos
+
+    # Aplica la norma: los ases cuentan 11 excepto si te pasas de 21, entonces contarán 1. 
+    while (numero_as > 0) and (suma > 21):
+        suma -= 10
+        numero_as -= 1
+
+    return suma
+
+
 def visualizar_carta(carta: Carta) -> str:
     """ Obtiene una cadena con la carta de forma más visual. """
     return f"[{carta[0]} {carta[1]}]"
@@ -83,6 +111,6 @@ def visualizar_mazo(mano: list[Carta], ocultar: bool = False) -> str:
     """ Obtiene una cadena con la carta de forma más visual. """
     return ", ".join(
                     visualizar_carta(carta)
-                    if (i > 0) and ocultar else "[???]" 
+                    if (i == 0) or not ocultar else "[???]" 
                     for i, carta in enumerate(mano)
                 )

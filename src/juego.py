@@ -1,33 +1,9 @@
-import cartas
+import cartas, menu, utilidades
 
+def puede_pedir(puntos: int) -> bool:
+    """ Comprueba si puede pedir o no """
+    return puntos < 21
 
-def obtener_suma(mazo: list[cartas.Carta]) -> int:
-    """
-    Obtiene la suma de un mazo de cartas.
-
-    Args:
-        cartas: Las cartas a sumar.
-    Returns:
-        int: La suma.
-    """
-    suma: int = 0
-    numero_as: int = 0
-
-    for carta in mazo:
-        puntos: int = cartas.obtener_puntos(carta)
-
-        if puntos == 11:
-            numero_as += 1
-
-        suma += puntos
-
-    # Aplica la norma: los ases cuentan 11 excepto si te pasas de 21, entonces contarán 1. 
-    while (numero_as > 0) and (suma > 21):
-        suma -= 10
-        numero_as -= 1
-
-    return suma
-    
 
 def jugar():
     """
@@ -37,3 +13,21 @@ def jugar():
 
     cartas_cupier: list[cartas.Carta] = [cartas.siguiente_carta(mazo) for _ in range(2)]
     cartas_jugador: list[cartas.Carta] = [cartas.siguiente_carta(mazo) for _ in range(2)]
+
+    puntos_cupier: int = cartas.obtener_suma(cartas_cupier)
+    puntos_jugador: int = cartas.obtener_suma(cartas_jugador)
+
+    
+    eleccion: int = 0
+    while puede_pedir(puntos_jugador) and eleccion != 2:
+        menu.mostrar_partida(cartas_cupier, cartas_jugador)
+        print("")
+        menu.mostrar_acciones()
+
+        eleccion = utilidades.pedir_entero("> ", 1, 2)
+
+        if eleccion == 1:
+            cartas_jugador.append(cartas.siguiente_carta(mazo))
+            puntos_jugador = cartas.obtener_suma(cartas_jugador)
+
+        
